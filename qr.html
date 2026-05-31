@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QR 코드 생성 — 초록 돌봄방</title>
+  <style>
+    body{font-family:system-ui, 'Noto Sans KR',sans-serif; padding:20px; background:#f6fff6}
+    .card{background:#fff;padding:18px;border-radius:10px;max-width:640px;margin:0 auto;box-shadow:0 8px 20px rgba(10,80,20,0.06)}
+    label{display:block;margin-top:8px}
+    input[type=text]{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+    .row{display:flex;gap:8px;margin-top:10px}
+    button{padding:8px 12px;border-radius:6px;border:none;background:#8ed081;color:#033;cursor:pointer}
+    #preview{margin-top:14px;display:flex;align-items:center;gap:12px}
+    canvas{border:1px solid #eee}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>QR 코드 생성</h2>
+    <p>배포용 URL을 입력하고 QR을 생성하세요. 생성된 이미지는 다운로드할 수 있습니다.</p>
+
+    <label>URL</label>
+    <input id="urlInput" type="text" placeholder="예: https://yourname.github.io/gdya/" />
+
+    <div class="row">
+      <button id="gen">QR 생성</button>
+      <button id="download">PNG 다운로드</button>
+      <button id="fillLocal">로컬 테스트 URL 채우기</button>
+    </div>
+
+    <div id="preview">
+      <canvas id="qrCanvas" width="220" height="220" aria-hidden="true"></canvas>
+      <div>
+        <div>미리보기</div>
+        <div id="outUrl" style="color:#666;margin-top:6px"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script>
+    const urlInput = document.getElementById('urlInput');
+    const gen = document.getElementById('gen');
+    const download = document.getElementById('download');
+    const fillLocal = document.getElementById('fillLocal');
+    const outUrl = document.getElementById('outUrl');
+    const canvas = document.getElementById('qrCanvas');
+
+    const qr = new QRious({element: canvas, size: 220, value: ''});
+
+    function generate(){
+      const u = urlInput.value.trim(); if(!u) return alert('URL을 입력하세요');
+      qr.value = u; outUrl.textContent = u;
+    }
+
+    gen.addEventListener('click', generate);
+    fillLocal.addEventListener('click', ()=>{ urlInput.value = location.origin + location.pathname.replace(/index.html$|\/$/, '/'); urlInput.focus(); });
+
+    download.addEventListener('click', ()=>{
+      const u = urlInput.value.trim(); if(!u) return alert('먼저 URL을 입력하고 생성하세요');
+      // use canvas toDataURL
+      const data = canvas.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = data; a.download = 'plant-qr.png'; document.body.appendChild(a); a.click(); a.remove();
+    });
+
+    // auto-generate from query param ?u=
+    const params = new URLSearchParams(location.search);
+    if(params.get('u')){ urlInput.value = params.get('u'); generate(); }
+  </script>
+</body>
+</html>

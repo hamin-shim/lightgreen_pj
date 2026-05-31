@@ -1,109 +1,80 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Plantagotchi</title>
-    <!-- Google Fonts (user-specified) -->
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Bagel+Fat+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <!-- Loading overlay -->
-    <div id="loading" class="loading-overlay">
-      <div class="logo-wrap">
-        <h1 class="logo">Plantagotchi</h1>
-        <div class="loading-text">LOADING..</div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>초록 돌봄방</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>초록 돌봄방</h1>
+      <p class="subtitle">QR로 접속해 함께 돌보는 식물 다마고치</p>
+    </header>
+
+    <section class="plant-area">
+      <div id="plantCard" class="plant-card">
+        <div id="plantSprite" class="plant-sprite" aria-hidden="true">
+          <!-- simple SVG plant -->
+          <svg viewBox="0 0 120 120" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="1.2"/>
+              </filter>
+            </defs>
+            <rect width="120" height="120" rx="16" fill="#f6fff6"/>
+            <g transform="translate(10,18)">
+              <ellipse cx="50" cy="80" rx="36" ry="12" fill="#c9a27a" />
+              <rect x="30" y="48" width="40" height="36" rx="6" fill="#e6caa7"/>
+              <g id="leaves" fill="#4caf50" filter="url(#soft)">
+                <ellipse cx="50" cy="36" rx="30" ry="14"/>
+                <ellipse cx="36" cy="26" rx="18" ry="8" transform="rotate(-20 36 26)"/>
+                <ellipse cx="64" cy="26" rx="18" ry="8" transform="rotate(20 64 26)"/>
+              </g>
+              <circle id="eyeL" cx="44" cy="32" r="2.5" fill="#173a18"/>
+              <circle id="eyeR" cx="56" cy="32" r="2.5" fill="#173a18"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="status">
+          <div id="growTime" class="grow-time">함께 자란 지 --일 --시간</div>
+          <div id="lastCare" class="last-care">마지막 돌봄 이후 --시간</div>
+          <div class="today-stats">오늘 받은 관심: <span id="todayCount">0</span></div>
+        </div>
+
+        <div class="actions">
+          <button class="care-btn" data-type="soil">흙 확인했어요</button>
+          <button class="care-btn" data-type="sunlight">햇빛 확인했어요</button>
+          <button class="care-btn" data-type="leaf">잎을 관찰했어요</button>
+          <button class="care-btn" data-type="new">새 변화를 발견했어요</button>
+        </div>
+
+        <div class="message-area">
+          <input id="msgInput" maxlength="30" placeholder="응원 메시지 30자 이내" />
+          <button id="sendMsg">마음 남기기</button>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <!-- (Using default system cursor) -->
+    <section class="memory">
+      <h2>메시지 카드</h2>
+      <div id="messages" class="messages"></div>
+    </section>
 
-    <main class="page-root">
-      <section class="center-stage">
-        <div class="device-shell">
-          <div class="device-top"></div>
-          <div class="device-screen">
-            <!-- Reference image (ref7.jpg) should be placed at assets/ref7.jpg -->
-            <img id="petImage" src="assets/ref7.jpg" alt="Plantagotchi"/>
-          </div>
-          <div class="device-controls">
-            <div class="d-pad">
-              <div></div><div></div><div></div>
-              <div></div>
-            </div>
-            <div class="buttons">
-              <span></span><span></span><span></span>
-            </div>
-          </div>
-        </div>
-        <div class="caption">Plantagotchi — a cute Y2K pixel pet</div>
-      </section>
-    </main>
+    <section class="logs">
+      <h2>오늘의 돌봄 흔적</h2>
+      <ul id="logsList" class="logs-list"></ul>
+    </section>
 
-      <!-- Main content sections -->
-      <section id="homeSection" class="site-section home-section">
-        <div class="section-inner">
-          <div class="left">
-            <div class="device-shell small">
-              <div class="device-screen mini">
-                <div class="glitch" id="glitchMini">
-                  <img id="petMini" src="assets/ref7.jpg" alt="Plantagotchi"/>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="right">
-            <h2 class="section-title">초록이와 함께</h2>
-            <p id="statusText">오늘은 누군가의 시선을 기다리는 중이에요.</p>
-            <div class="stats-grid">
-              <div class="stat">
-                <div class="label">함께 자란 시간</div>
-                <div id="grownTime">0일 0시간</div>
-              </div>
-              <div class="stat">
-                <div class="label">마지막 돌봄 이후</div>
-                <div id="lastCare">0시간</div>
-              </div>
-              <div class="stat">
-                <div class="label">오늘 받은 관심</div>
-                <div id="todayCount">0개</div>
-              </div>
-              <div class="stat">
-                <div class="label">남겨진 마음</div>
-                <div id="totalMessages">0개</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <footer>
+      <small>익명 참여 · 개인정보 없음</small>
+    </footer>
+  </main>
 
-      <section id="careSection" class="site-section care-section">
-        <h3 class="section-title">돌봄 버튼</h3>
-        <div class="care-grid">
-          <button class="care-button" data-type="soil">흙 확인했어요</button>
-          <button class="care-button" data-type="sunlight">햇빛 확인했어요</button>
-          <button class="care-button" data-type="observe">잎을 관찰했어요</button>
-          <button class="care-button" data-type="sparkle">새 변화를 발견했어요</button>
-        </div>
-        <div id="careLog" class="care-log"></div>
-      </section>
+  <div id="effectLayer" class="effect-layer" aria-hidden="true"></div>
 
-      <section id="memorySection" class="site-section memory-section">
-        <h3 class="section-title">응원 메시지</h3>
-        <form id="messageForm" class="message-form">
-          <textarea id="messageInput" maxlength="30" placeholder="오늘 식물에게 전할 말을 적어보세요 (30자)"></textarea>
-          <button type="submit" class="submit-btn">마음을 남기기</button>
-        </form>
-        <div class="message-count">총 <span id="messageCount">0</span>개의 잎사귀 카드</div>
-        <div id="messageList" class="message-list"></div>
-      </section>
-
-      <section id="growthSection" class="site-section growth-section">
-        <h3 class="section-title">함께 자란 흔적</h3>
-        <div id="growthFeed" class="growth-feed"></div>
-      </section>
-
-    <script src="script.js"></script>
-  </body>
+  <script src="app.js" defer></script>
+</body>
 </html>
