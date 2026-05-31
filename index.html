@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>초록 돌봄방</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand-mark">🌿</div>
+      <div>
+        <h1>초록 돌봄방</h1>
+        <p>학교 식물과 함께하는 따뜻한 돌봄 이야기</p>
+      </div>
+    </div>
+    <nav class="site-nav">
+      <a href="#home">Home</a>
+      <a href="#care">Care</a>
+      <a href="#memory">Memory</a>
+      <a href="#growth">Growth</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="panel home-panel">
+      <div class="hero-card">
+        <div class="plant-card" id="plantCard">
+          <div class="plant-leaf leaf-1"></div>
+          <div class="plant-leaf leaf-2"></div>
+          <div class="plant-pot"></div>
+          <div class="plant-face" id="plantFace">😊</div>
+        </div>
+        <div class="hero-copy">
+          <h2>같이 자라는 식물, 오늘도 관심이 쌓여요</h2>
+          <p id="plantStatus">식물에게 오늘 어떤 메시지를 남기고 싶나요?</p>
+          <div class="status-grid">
+            <div>
+              <span>함께 자란 시간</span>
+              <strong id="grownTime">0일 0시간</strong>
+            </div>
+            <div>
+              <span>마지막 돌봄 이후</span>
+              <strong id="lastCare">0시간</strong>
+            </div>
+            <div>
+              <span>오늘 받은 관심</span>
+              <strong id="todayCount">0개</strong>
+            </div>
+            <div>
+              <span>남겨진 마음</span>
+              <strong id="totalMessages">0개</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="care" class="panel care-panel">
+      <div class="section-header">
+        <h3>돌봄 버튼</h3>
+        <p>식물을 살피고 감성적인 반응을 남겨주세요.</p>
+      </div>
+      <div class="care-grid">
+        <button class="care-button" data-type="soil">흙 확인했어요</button>
+        <button class="care-button" data-type="sunlight">햇빛 확인했어요</button>
+        <button class="care-button" data-type="observe">잎을 관찰했어요</button>
+        <button class="care-button" data-type="sparkle">새 변화를 발견했어요</button>
+      </div>
+      <div class="care-log" id="actionLog"></div>
+    </section>
+
+    <section id="memory" class="panel memory-panel">
+      <div class="section-header">
+        <h3>응원 메시지</h3>
+        <p>30자 이내의 익명 응원 메시지를 남겨주세요.</p>
+      </div>
+      <form id="messageForm" class="message-form">
+        <textarea id="messageInput" maxlength="30" placeholder="오늘 식물에게 전할 말을 적어보세요."></textarea>
+        <button type="submit">마음을 남기기</button>
+      </form>
+      <div class="message-count">총 <span id="messageCount">0</span>개의 잎사귀 카드</div>
+      <div class="message-list" id="messageList"></div>
+    </section>
+
+    <section id="growth" class="panel growth-panel">
+      <div class="section-header">
+        <h3>함께 자란 흔적</h3>
+        <p>돌봄 행동과 메시지가 시간 속에 쌓여갑니다.</p>
+      </div>
+      <div class="growth-feed" id="growthFeed"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>이 웹사이트는 GitHub Pages 배포용으로 만들어졌습니다.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
