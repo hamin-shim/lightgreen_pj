@@ -374,3 +374,18 @@ body{cursor:none}
 /* small helpers */
 .center-stage .caption{color:#084;opacity:.9}
 
+/* Plan modal styles (pixel / Y2K) */
+.plan-toggle{position:fixed;right:18px;bottom:18px;background:linear-gradient(180deg,#ffd1f7,#ff9fe6);border:3px solid #7a00c7;color:#120014;padding:12px 14px;border-radius:12px;font-weight:800;font-family:'Jersey 10',sans-serif;z-index:10001;box-shadow:0 8px 20px rgba(122,0,199,0.18)}
+.plan-modal{position:fixed;inset:6% 6%;display:none;z-index:10000;align-items:center;justify-content:center}
+.plan-modal[aria-hidden="false"]{display:flex}
+.plan-panel{width:86%;max-width:980px;height:80%;background:linear-gradient(180deg,#fff9ff,#f3fff6);border:6px solid #8b00ff;border-radius:18px;padding:18px;box-shadow:0 30px 80px rgba(11,6,40,0.6);overflow:auto;font-family:'Bagel Fat One',sans-serif;color:#192a1f}
+.plan-close{position:absolute;right:28px;top:22px;background:#ffefef;border-radius:10px;padding:6px 10px;border:2px solid #7a00c7;color:#7a0066;font-weight:700;cursor:pointer}
+.plan-header{font-family:'Jersey 10',sans-serif;font-size:22px;color:#00fff0;text-shadow:0 4px 0 #8b00ff;padding-bottom:8px}
+.plan-content{line-height:1.5;padding:8px}
+.plan-content h2,.plan-content h3{font-family:'Jersey 10',sans-serif;color:#0a6;}
+.plan-content ul{margin-left:1rem}
+.plan-content .code{background:#02111a;color:#bff;padding:12px;border-radius:8px;margin:8px 0;font-family:monospace;font-size:13px}
+
+/* small screens for modal */
+@media (max-width:720px){.plan-panel{width:94%;height:86%}}
+

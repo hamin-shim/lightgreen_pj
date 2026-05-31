@@ -44,5 +44,24 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // start after a short delay
     setTimeout(triggerGlitch, 1200 + Math.random()*1600);
   }
+  
+  // Plan modal open/close
+  const openPlan = document.getElementById('openPlan');
+  const closePlan = document.getElementById('closePlan');
+  const planModal = document.getElementById('planModal');
+  if(openPlan && planModal){
+    openPlan.addEventListener('click', ()=>{
+      planModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+  if(closePlan && planModal){
+    closePlan.addEventListener('click', ()=>{
+      planModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    });
+  }
+  // close modal on ESC
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ if(planModal) { planModal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; } } });
 
 });
