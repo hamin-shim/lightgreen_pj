@@ -112,14 +112,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // init
   updateCounters(); updateStatus(); renderMessages(); renderGrowth();
 
-  // Custom cursor element follows mouse; uses assets/ref5.jpg if present
-  const cursor = document.getElementById('customCursor');
-  window.addEventListener('mousemove', (e)=>{
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  // hide cursor on touch devices
-  window.addEventListener('touchstart', ()=>{ cursor.style.display = 'none'; document.body.style.cursor = 'auto'; });
+  // No custom cursor: using system default cursor
 
   // If reference image for pet isn't present, use a lightweight fallback (colored sprite)
   const petImg = document.getElementById('petImage');
