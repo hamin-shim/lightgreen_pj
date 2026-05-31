@@ -14,7 +14,7 @@ body {
   color: #123;
 }
 
-.container { max-width: 860px; margin: 20px auto; padding: 18px; }
+.container { max-width: 860px; margin: 20px auto; padding: 18px; position: relative; z-index: 1; }
 header h1 { margin: 0; font-size: 28px; }
 .subtitle { margin: 4px 0 18px; color: var(--muted); }
 .plant-area { display: flex; justify-content: center; }
@@ -50,5 +50,12 @@ footer { margin-top:18px; color:var(--muted); text-align:center; }
 .effect-layer { position: fixed; inset: 0; pointer-events: none; }
 .sparkle { position:absolute; width:24px; height:24px; border-radius:50%; background: radial-gradient(circle,#fff,#ffd1dc 60%); opacity:0; transform:scale(0.5); animation: spark 900ms ease-out forwards; }
 @keyframes spark { 0% { opacity:1; transform: translateY(0) scale(0.6); } 100% { opacity:0; transform: translateY(-80px) scale(1.4); } }
+
+.emoji-background { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.emoji-background span { position: absolute; opacity: 0.6; user-select: none; pointer-events: none; will-change: transform, opacity; }
+.emoji-background span.float { animation: float 14s ease-in-out infinite; }
+.emoji-background span.drift { animation: drift 18s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(6px, -18px); } }
+@keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(18px, 6px); } }
 
 @media (max-width:700px) { .plant-card { grid-template-columns: 1fr; } }

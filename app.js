@@ -96,6 +96,27 @@
     setTimeout(()=> el.remove(), 1000);
   }
 
+  function createEmojiBackground(){
+    const container = q('.emoji-background');
+    if(!container) return;
+    const emojis = ['🌱','🌿','🌵','🌳'];
+    for(let i=0; i<30; i++){
+      const span = document.createElement('span');
+      const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+      const size = Math.floor(15 + Math.random()*26);
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      span.textContent = emoji;
+      span.style.fontSize = `${size}px`;
+      span.style.left = `${left}%`;
+      span.style.top = `${top}%`;
+      span.style.animationDuration = `${12 + Math.random()*8}s`;
+      span.style.animationDelay = `${-Math.random()*18}s`;
+      span.className = Math.random() > 0.5 ? 'float' : 'drift';
+      container.appendChild(span);
+    }
+  }
+
   // bind buttons
   qAll('.care-btn').forEach(b=> b.addEventListener('click', e=>{
     const type = b.getAttribute('data-type'); addCare(type);
@@ -107,6 +128,7 @@
   });
 
   // initial render and tick
+  createEmojiBackground();
   updateAll();
   setInterval(updateAll, 1000*60);
 
