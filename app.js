@@ -29,6 +29,8 @@
   const logsList = q('#logsList');
   const messagesEl = q('#messages');
   const msgInput = q('#msgInput');
+  const loaderEl = q('.loader-screen');
+  const mainEl = q('main.container');
 
   function formatDuration(ms){
     const s = Math.floor(ms/1000), h = Math.floor(s/3600), d = Math.floor(h/24);
@@ -127,9 +129,15 @@
     addMessage(text); msgInput.value='';
   });
 
+  function hideLoader(){
+    if(loaderEl) loaderEl.classList.add('hidden');
+    if(mainEl) mainEl.classList.remove('hidden');
+  }
+
   // initial render and tick
   createEmojiBackground();
   updateAll();
+  setTimeout(hideLoader, 2000);
   setInterval(updateAll, 1000*60);
 
   // expose for debugging

@@ -5,11 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>식물 하나를 키우는 데는 온 학교가 필요하다</title>
   <base href="./">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="loader-screen" aria-hidden="true">
+    <div class="loader-card">
+      <h1>식물 하나를 키우는 데는 온 학교가 필요하다</h1>
+      <p class="loader-text">loading...</p>
+    </div>
+  </div>
   <div class="emoji-background" aria-hidden="true"></div>
-  <main class="container">
+  <main class="container hidden">
     <header>
       <h1>식물 하나를 키우는 데는 온 학교가 필요하다</h1>
       <p class="subtitle">QR로 접속해 함께 돌보는 식물 다마고치</p>
@@ -54,7 +63,7 @@
         </div>
 
         <div class="message-area">
-          <input id="msgInput" maxlength="30" placeholder="응원 메시지 30자 이내" />
+          <textarea id="msgInput" maxlength="30" placeholder="응원 메시지를 30자 이내로 남겨주세요." rows="3"></textarea>
           <button id="sendMsg">마음 남기기</button>
         </div>
       </div>
