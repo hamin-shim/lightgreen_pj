@@ -629,123 +629,6 @@
             font-size: 0.95rem;
         }
 
-        /* Gallery Section */
-        .gallery {
-            padding: 150px 80px;
-            background: linear-gradient(180deg, transparent, rgba(106, 169, 92, 0.05), transparent);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 280px);
-            gap: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .gallery-item {
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-item::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .gallery-item:hover::after {
-            opacity: 1;
-        }
-
-        .gallery-item:nth-child(1) {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        .gallery-item:nth-child(4) {
-            grid-column: span 2;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            padding: 150px 80px;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(243, 255, 243, 0.5));
-            border: 1px solid rgba(106, 169, 92, 0.15);
-            border-radius: 24px;
-            padding: 40px;
-            position: relative;
-        }
-
-        .testimonial-quote {
-            font-size: 4rem;
-            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 20px;
-        }
-
-        .testimonial-text {
-            color: rgba(31, 61, 31, 0.75);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .testimonial-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .testimonial-info h4 {
-            font-weight: 700;
-            color: #1f3d1f;
-            margin-bottom: 5px;
-        }
-
-        .testimonial-info span {
-            color: rgba(31, 61, 31, 0.5);
-            font-size: 0.9rem;
-        }
-
         /* CTA Section */
         .cta {
             padding: 150px 80px;
@@ -947,16 +830,13 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
             .footer-content {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .features, .gallery, .testimonials, .cta {
+            .features, .cta {
                 padding: 100px 30px;
             }
             .section-header h2, .cta h2 {
@@ -990,8 +870,6 @@
         <div class="logo">🌱 식물 다마고치</div>
         <ul class="nav-links">
             <li><a href="#features">기능</a></li>
-            <li><a href="#gallery">갤러리</a></li>
-            <li><a href="#reviews">후기</a></li>
             <li><a href="#contact">시작하기</a></li>
         </ul>
         <button class="nav-cta">QR 스캔</button>
@@ -1113,79 +991,6 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="section-header">
-            <span class="section-tag">갤러리</span>
-            <h2>사용자들의 특별한 순간</h2>
-            <p>학생들이 남긴 응원 메시지와 돌봄의 흔적들을 감상해보세요.</p>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop" alt="식물 1">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=500&fit=crop" alt="식물 2">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=500&h=500&fit=crop" alt="식물 3">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&h=500&fit=crop" alt="식물 4">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=500&h=500&fit=crop" alt="식물 5">
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop" alt="식물 6">
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials" id="reviews">
-        <div class="section-header">
-            <span class="section-tag">학생 후기</span>
-            <h2>함께한 학생들의 이야기</h2>
-            <p>이 프로젝트를 통해 느낀 특별한 경험들을 나눠주세요.</p>
-        </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">처음엔 그냥 버튼을 누르는 것인 줄 알았는데, 우리의 관심이 정말 모여서 식물이 자라는 모습을 보니까 신기해요.</p>
-                <div class="testimonial-author">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="김민지">
-                    <div class="testimonial-info">
-                        <h4>김민지</h4>
-                        <span>학생 · 서울</span>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">응원 메시지를 남기고 싶었어요. 낯선 사람들의 메시지도 보면서 우리가 다 함께하고 있다는 느낌이 들었어요.</p>
-                <div class="testimonial-author">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="이준호">
-                    <div class="testimonial-info">
-                        <h4>이준호</h4>
-                        <span>학생 · 부산</span>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"</div>
-                <p class="testimonial-text">매일 쉬는 시간에 QR 스캔해서 확인했어요. 식물이 이렇게까지 자랄 수 있다니 우리들 덕분인 것 같아 뿌듯했어요.</p>
-                <div class="testimonial-author">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop" alt="박수진">
-                    <div class="testimonial-info">
-                        <h4>박수진</h4>
-                        <span>학생 · 대전</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA Section -->
     <section class="cta" id="contact">
         <div class="cta-bg"></div>
@@ -1210,8 +1015,6 @@
                 <h4>프로젝트</h4>
                 <ul>
                     <li><a href="#features">기능</a></li>
-                    <li><a href="#gallery">갤러리</a></li>
-                    <li><a href="#reviews">후기</a></li>
                     <li><a href="#contact">시작하기</a></li>
                 </ul>
             </div>
