@@ -1,5 +1,5 @@
 (() => {
-  const SUPABASE_URL = 'xxx';
+  const SUPABASE_URL = 'https://vvjzbjbdtxnbyvffjdnf.supabase.co';
   const SUPABASE_ANON_KEY = 'xxx';
   const CARE_EVENTS_TABLE = 'care_events';
 
