@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>식물 하나를 키우는 데는 온 학교가 필요하다</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eef9ef;
+      --surface: #ffffff;
+      --surface-strong: #f3fff3;
+      --text: #1f3d1f;
+      --muted: #5c6d5c;
+      --accent: #6aa95c;
+      --accent-strong: #3b7c3b;
+      --border: rgba(90, 117, 90, 0.15);
+      --shadow: 0 20px 60px rgba(47, 86, 47, 0.12);
+      --radius: 28px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: radial-gradient(circle at top, #f6fff2 0%, var(--bg) 45%, #d9f2d4 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    textarea,
+    a {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .loader-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, #f4fbf4 0%, #cfeacc 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loader-card {
+      width: min(92vw, 420px);
+      padding: 36px 28px;
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(101, 150, 101, 0.18);
+      box-shadow: 0 24px 60px rgba(41, 112, 41, 0.14);
+      text-align: center;
+    }
+
+    .loader-card h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+      color: var(--accent-strong);
+    }
+
+    .loader-text {
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .emoji-background {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .emoji-background span {
+      position: absolute;
+      opacity: 0.45;
+      pointer-events: none;
+      user-select: none;
+      font-size: 20px;
+    }
+
+    .emoji-background span.float {
+      animation: float 14s ease-in-out infinite;
+    }
+
+    .emoji-background span.drift {
+      animation: drift 18s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(8px, -18px); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(18px, 6px); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 30px 28px 60px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 10px 0 30px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(106, 169, 92, 0.12);
+      color: var(--accent-strong);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .topbar h1 {
+      font-size: clamp(2.5rem, 4vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      max-width: 700px;
+      margin-top: 16px;
+    }
+
+    .topbar p {
+      margin-top: 18px;
+      max-width: 720px;
+      line-height: 1.8;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .topnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .topnav a {
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(106, 169, 92, 0.14);
+      color: var(--accent-strong);
+      font-weight: 600;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .topnav a:hover {
+      transform: translateY(-1px);
+      background: rgba(106, 169, 92, 0.2);
+    }
+
+    .hero-section {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: stretch;
+      margin-top: 20px;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      color: #366833;
+      background: rgba(106, 169, 92, 0.12);
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .hero-copy h2 {
+      font-size: clamp(2.6rem, 4vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-copy p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .button {
+      padding: 16px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+      color: white;
+      box-shadow: 0 18px 40px rgba(45, 96, 39, 0.2);
+    }
+
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--accent-strong);
+      border: 1px solid rgba(106, 169, 92, 0.2);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-card {
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plant-card {
+      width: 100%;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #f9fff9 0%, #eefff1 100%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 20px;
+    }
+
+    .plant-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .plant-header .card-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .plant-header h3 {
+      font-size: 1.8rem;
+      margin-top: 6px;
+      color: #2f5b2f;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(106, 169, 92, 0.16);
+      color: var(--accent-strong);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .plant-sprite {
+      min-height: 380px;
+      border-radius: 28px;
+      background: radial-gradient(circle at top left, #f6fff5 0%, #e3f7df 45%, #daf2d3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      border: 1px solid rgba(82, 146, 82, 0.15);
+    }
+
+    .plant-note {
+      font-size: 0.98rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .status-grid {
+      margin: 40px 0 10px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .status-card {
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid rgba(95, 142, 95, 0.14);
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(66, 122, 66, 0.08);
+    }
+
+    .status-card p {
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--accent-strong);
+      letter-spacing: -0.04em;
+    }
+
+    section {
+      margin-top: 50px;
+    }
+
+    .section-header {
+      display: grid;
+      gap: 14px;
+      max-width: 720px;
+      margin-bottom: 24px;
+    }
+
+    .section-header span {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent-strong);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2.1rem, 3vw, 2.8rem);
+      line-height: 1.05;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 640px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .care-btn {
+      background: white;
+      border: 1px solid rgba(106, 169, 92, 0.2);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 18px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .care-btn:hover {
+      transform: translateY(-3px);
+      border-color: rgba(106, 169, 92, 0.4);
+      box-shadow: 0 16px 34px rgba(62, 110, 62, 0.12);
+    }
+
+    .message-area {
+      display: grid;
+      grid-template-columns: 1.7fr 0.9fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 116px;
+      border-radius: 20px;
+      border: 1px solid rgba(96, 146, 96, 0.22);
+      padding: 18px;
+      resize: none;
+      background: #fbfff9;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    #sendMsg {
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 18px 24px;
+      align-self: flex-end;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    #sendMsg:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(62, 110, 62, 0.18);
+    }
+
+    .messages {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .msg-card {
+      padding: 22px;
+      background: #fbfff9;
+      border-radius: 24px;
+      border: 1px solid rgba(96, 146, 96, 0.18);
+      box-shadow: 0 16px 32px rgba(45, 93, 45, 0.08);
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .msg-card div:first-child {
+      margin-bottom: 12px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .msg-card small {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .logs-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 14px;
+    }
+
+    .logs-list li {
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1px solid rgba(106, 169, 92, 0.12);
+      color: var(--text);
+      box-shadow: 0 14px 30px rgba(44, 89, 44, 0.08);
+    }
+
+    .growth-card {
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, #fbfff9 0%, #e7f9e4 100%);
+      border: 1px solid rgba(106, 169, 92, 0.18);
+      box-shadow: var(--shadow);
+      padding: 32px;
+    }
+
+    .growth-card h3 {
+      margin-bottom: 16px;
+      font-size: 1.8rem;
+      color: #3f6e3f;
+    }
+
+    .growth-card p {
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    .growth-pill {
+      display: inline-flex;
+      padding: 14px 20px;
+      border-radius: 999px;
+      background: rgba(106, 169, 92, 0.14);
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .effect-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(144, 218, 144, 0.8) 50%, transparent 100%);
+      opacity: 0;
+      transform: scale(0.5);
+      animation: spark 900ms ease-out forwards;
+    }
+
+    @keyframes spark {
+      0% { opacity: 1; transform: translateY(0) scale(0.6); }
+      100% { opacity: 0; transform: translateY(-80px) scale(1.4); }
+    }
+
+    @media (max-width: 1080px) {
+      .hero-section {
+        grid-template-columns: 1fr;
+      }
+
+      .status-grid,
+      .actions,
+      .message-area,
+      .messages {
+        grid-template-columns: 1fr;
+      }
+
+      .message-area {
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 20px 18px 40px;
+      }
+
+      .topbar {
+        display: block;
+      }
+
+      .topnav {
+        justify-content: flex-start;
+      }
+
+      .hero-copy h2 {
+        font-size: 2.4rem;
+      }
+
+      .plant-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-screen" aria-hidden="true">
+    <div class="loader-card">
+      <h1>함께 자라는 식물 다마고치</h1>
+      <p class="loader-text">잠시만 기다려주세요...</p>
+    </div>
+  </div>
+
+  <div class="emoji-background" aria-hidden="true"></div>
+
+  <main class="page container hidden">
+    <section class="topbar">
+      <div>
+        <span class="eyebrow">QR 참여형 식물 돌봄</span>
+        <h1>식물 하나를 키우는 데는 온 학교가 필요하다</h1>
+        <p>물·햇빛·관찰·응원이 모여서 학교 식물을 함께 키우는 따뜻한 디지털 다마고치입니다.</p>
+      </div>
+      <nav class="topnav">
+        <a href="#care">돌봄하기</a>
+        <a href="#memory">응원 메시지</a>
+        <a href="#logs">돌봄 흔적</a>
+        <a href="#growth">성장 보기</a>
+      </nav>
+    </section>
+
+    <section class="hero-section">
+      <article class="hero-copy">
+        <div class="badge">여러 참여자가 함께 돌보는 식물</div>
+        <h2>QR을 통해 언제든 참여하고,<br>따뜻한 관심을 식물에 남겨요.</h2>
+        <p>익명으로 참여할 수 있는 돌봄 버튼과 응원 메시지로, 식물의 하루를 함께 만들어주세요.</p>
+        <div class="hero-actions">
+          <a href="#care" class="button button-primary">돌봄하러 가기</a>
+          <a href="#memory" class="button button-secondary">응원 남기기</a>
+        </div>
+      </article>
+
+      <article class="hero-card">
+        <div class="plant-card">
+          <div class="plant-header">
+            <div>
+              <p class="card-label">식물 친구</p>
+              <h3>초록이</h3>
+            </div>
+            <span class="status-chip">익명 참여형</span>
+          </div>
+
+          <div id="plantSprite" class="plant-sprite" aria-hidden="true">
+            <svg viewBox="0 0 120 120" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="1.2" />
+                </filter>
+              </defs>
+              <rect width="120" height="120" rx="16" fill="#f6fff6" />
+              <g transform="translate(10,18)">
+                <ellipse cx="50" cy="80" rx="36" ry="12" fill="#c9a27a" />
+                <rect x="30" y="48" width="40" height="36" rx="6" fill="#e6caa7" />
+                <g id="leaves" fill="#4caf50" filter="url(#soft)">
+                  <ellipse cx="50" cy="36" rx="30" ry="14" />
+                  <ellipse cx="36" cy="26" rx="18" ry="8" transform="rotate(-20 36 26)" />
+                  <ellipse cx="64" cy="26" rx="18" ry="8" transform="rotate(20 64 26)" />
+                </g>
+                <circle id="eyeL" cx="44" cy="32" r="2.5" fill="#173a18" />
+                <circle id="eyeR" cx="56" cy="32" r="2.5" fill="#173a18" />
+              </g>
+            </svg>
+          </div>
+
+          <p class="plant-note">식물을 살피는 행동을 선택하면, 오늘의 관심 수와 메시지가 함께 쌓입니다.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="status-grid">
+      <article class="status-card">
+        <p>함께 자란 시간</p>
+        <strong id="growTime">--일 --시간</strong>
+      </article>
+      <article class="status-card">
+        <p>마지막 돌봄</p>
+        <strong id="lastCare">--시간</strong>
+      </article>
+      <article class="status-card">
+        <p>오늘 받은 관심</p>
+        <strong id="todayCount">0</strong>
+      </article>
+      <article class="status-card">
+        <p>남겨진 마음</p>
+        <strong id="messageCount">0</strong>
+      </article>
+    </section>
+
+    <section id="care">
+      <div class="section-header">
+        <span>CARE</span>
+        <h2>간단한 돌봄 버튼으로 참여하기</h2>
+        <p>흙, 햇빛, 잎 관찰, 새 변화 발견 중 하나를 선택하면 오늘의 식물 상태가 기록됩니다.</p>
+      </div>
+      <div class="actions">
+        <button class="care-btn" data-type="soil">흙 확인했어요</button>
+        <button class="care-btn" data-type="sunlight">햇빛 확인했어요</button>
+        <button class="care-btn" data-type="leaf">잎을 관찰했어요</button>
+        <button class="care-btn" data-type="new">새 변화를 발견했어요</button>
+      </div>
+    </section>
+
+    <section id="memory">
+      <div class="section-header">
+        <span>MEMORY</span>
+        <h2>응원 메시지 잎사귀</h2>
+        <p>30자 이내의 짧은 응원 메시지를 남겨주세요. 익명으로 식물에게 마음을 보낼 수 있어요.</p>
+      </div>
+      <div class="message-area">
+        <textarea id="msgInput" maxlength="30" placeholder="응원 메시지를 30자 이내로 남겨주세요." rows="4"></textarea>
+        <button id="sendMsg">마음 남기기</button>
+      </div>
+      <div id="messages" class="messages"></div>
+    </section>
+
+    <section id="logs">
+      <div class="section-header">
+        <span>LOGS</span>
+        <h2>오늘의 돌봄 흔적</h2>
+        <p>익명 참여자들이 남긴 돌봄 기록이 시간 순으로 쌓입니다.</p>
+      </div>
+      <ul id="logsList" class="logs-list"></ul>
+    </section>
+
+    <section id="growth">
+      <div class="section-header">
+        <span>GROWTH</span>
+        <h2>작은 관심이 큰 성장을 만듭니다</h2>
+        <p>식물은 하루하루의 관심을 모아 천천히 자라요. 여러분의 기록이 바로 성장의 증거입니다.</p>
+      </div>
+      <div class="growth-card">
+        <h3>오늘의 성장 기록</h3>
+        <p>오늘까지 모인 돌봄 행동과 응원이 식물의 하루를 따뜻하게 채우고 있습니다.</p>
+        <div class="growth-pill">총 돌봄 기록 <strong id="careCount">0</strong>개</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="effectLayer" class="effect-layer" aria-hidden="true"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
