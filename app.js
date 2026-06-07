@@ -1,6 +1,6 @@
 (() => {
   const SUPABASE_URL = 'https://vvjzbjbdtxnbyvffjdnf.supabase.co';
-  const SUPABASE_ANON_KEY = 'xxx';
+  const SUPABASE_ANON_KEY = 'sb_publishable_04MdzpRFmb0Ka4KvEWft_Q_M8-yaCbT';
   const CARE_EVENTS_TABLE = 'care_events';
   const LOCAL_EVENTS_KEY = 'plantCareEvents_v1';
 
@@ -8,8 +8,16 @@
     soil: '흙 확인',
     sunlight: '햇빛 확인',
     leaf: '잎 관찰',
-    new: '변화 발견',
-    message: '메시지'
+    water: '변화 발견',
+    cheer: '메시지'
+  };
+
+  const actionMap = {
+    soil: 'soil',
+    sunlight: 'sunlight',
+    leaf: 'leaf',
+    new: 'water',
+    message: 'cheer'
   };
 
   const q = selector => document.querySelector(selector);
@@ -115,8 +123,7 @@
   function addLocalEvent(type, message = null) {
     const event = {
       id: window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
-      type,
-      label: eventLabels[type] ?? type,
+      action: actionMap[type] ?? type,
       message: message || null,
       created_at: new Date().toISOString()
     };
@@ -172,8 +179,7 @@
     }
 
     const payload = {
-      type,
-      label: eventLabels[type] ?? type,
+      action: actionMap[type] ?? type,
       message: cleanMessage || null
     };
 
