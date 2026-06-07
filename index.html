@@ -463,6 +463,33 @@
             box-shadow: 0 8px 20px rgba(62, 110, 62, 0.18);
         }
 
+        .recent-messages-hero {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(106, 169, 92, 0.16);
+        }
+
+        .recent-messages-hero h4 {
+            margin-bottom: 10px;
+            color: #1f3d1f;
+            font-size: 0.95rem;
+        }
+
+        .recent-messages-hero ul {
+            display: grid;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .recent-messages-hero li {
+            border-radius: 10px;
+            background: rgba(106, 169, 92, 0.08);
+            color: rgba(31, 61, 31, 0.75);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            padding: 9px 10px;
+        }
+
         /* Stats Section */
         .stats {
             padding: 80px 80px;
@@ -1012,6 +1039,13 @@
                     <textarea id="msgInput" maxlength="30" placeholder="메시지 30자"></textarea>
                     <button id="sendMsg" class="send-msg-hero">남기기</button>
                 </div>
+
+                <div class="recent-messages-hero">
+                    <h4>최근 메시지</h4>
+                    <ul id="recentMessages">
+                        <li>아직 남겨진 메시지가 없습니다.</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
@@ -1212,6 +1246,7 @@
     </footer>
 
     <div id="effectLayer" class="effect-layer" aria-hidden="true"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js" defer></script>
 </body>
 </html>
