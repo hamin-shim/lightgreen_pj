@@ -26,11 +26,22 @@
   const growTimeEl = q('#growTime');
   const lastCareEl = q('#lastCare');
   const todayCountEl = q('#todayCount');
+  const messageCountEl = q('#messageCount');
+  const careCountEl = q('#careCount');
   const logsList = q('#logsList');
   const messagesEl = q('#messages');
   const msgInput = q('#msgInput');
   const loaderEl = q('.loader-screen');
   const mainEl = q('main.container');
+
+  // Safe element access (missing elements won't cause errors)
+  const safeEl = (el, name) => {
+    if (!el) {
+      console.warn(`Element ${name} not found, skipping`);
+      return null;
+    }
+    return el;
+  };
 
   function formatDuration(ms){
     const s = Math.floor(ms/1000), h = Math.floor(s/3600), d = Math.floor(h/24);
@@ -40,18 +51,24 @@
   function updateStats(){
     const start = new Date(state.plant.startDate);
     const now = new Date();
-    growTimeEl.textContent = `함께 자란 지 ${formatDuration(now - start)}`;
+    if (growTimeEl) growTimeEl.textContent = `함께 자란 지 ${formatDuration(now - start)}`;
 
     const last = state.plant.lastCareTime ? new Date(state.plant.lastCareTime) : null;
-    lastCareEl.textContent = last ? `마지막 돌봄 이후 ${formatDuration(now - last)}` : '아직 돌봄 기록이 없습니다.';
+    if (lastCareEl) lastCareEl.textContent = last ? `마지막 돌봄 이후 ${formatDuration(now - last)}` : '아직 돌봄 기록이 없습니다.';
 
-    // today count: count logs from today
-    const today = new Date(); today.setHours(0,0,0,0);
-    const todayCount = state.careLogs.filter(c=> new Date(c.createdAt) >= today).length + state.messages.filter(m=> new Date(m.createdAt) >= today).length;
-    todayCountEl.textContent = todayCount;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const todayCount = state.careLogs.filter(c => new Date(c.createdAt) >= today).length + state.messages.filter(m => new Date(m.createdAt) >= today).length;
+    if (todayCountEl) todayCountEl.textContent = todayCount;
+
+    const totalMessages = state.messages.length;
+    if (messageCountEl) messageCountEl.textContent = totalMessages;
+
+    if (careCountEl) careCountEl.textContent = state.careLogs.length;
   }
 
   function renderLogs(){
+    if (!logsList) return;
     logsList.innerHTML = '';
     const today = new Date(); today.setHours(0,0,0,0);
     const todays = state.careLogs.filter(c=> new Date(c.createdAt) >= today).slice().reverse();
@@ -65,14 +82,19 @@
   }
 
   function renderMessages(){
+    if (!messagesEl) return;
     messagesEl.innerHTML='';
     state.messages.slice().reverse().forEach(m=>{
-      const d = document.createElement('div'); d.className='msg-card';
-      const t = document.createElement('div'); t.textContent = m.text;
-      const meta = document.createElement('small'); meta.style.color='#6b6b6b'; meta.textContent = new Date(m.createdAt).toLocaleString();
-      d.appendChild(t); d.appendChild(meta);
+      const d = document.createElement('div');
+      d.className = 'msg-card';
+      const t = document.createElement('div');
+      t.textContent = m.text;
+      const meta = document.createElement('small');
+      meta.textContent = new Date(m.createdAt).toLocaleString();
+      d.appendChild(t);
+      d.appendChild(meta);
       messagesEl.appendChild(d);
-    })
+    });
   }
 
   function addCare(type){
@@ -85,12 +107,20 @@
 
   function addMessage(text){
     const m = {text, createdAt: new Date().toISOString()};
-    state.messages.push(m); save(state); updateAll(); }
+    state.messages.push(m);
+    save(state);
+    updateAll();
+  }
 
-  function updateAll(){ updateStats(); renderLogs(); renderMessages(); }
+  function updateAll(){
+    updateStats();
+    renderLogs();
+    renderMessages();
+  }
 
   function triggerEffect(type){
     const layer = q('#effectLayer');
+    if (!layer) return; // effectLayer not found, skip effect
     const el = document.createElement('div'); el.className='sparkle';
     const x = window.innerWidth/2 + (Math.random()*120-60); const y = window.innerHeight/2 + (Math.random()*40-20);
     el.style.left = `${x}px`; el.style.top = `${y}px`;
@@ -100,7 +130,7 @@
 
   function createEmojiBackground(){
     const container = q('.emoji-background');
-    if(!container) return;
+    if(!container) return; // emoji background container not found, skip
     const emojis = ['🌱','🌿','🌵','🌳'];
     for(let i=0; i<30; i++){
       const span = document.createElement('span');
@@ -119,15 +149,41 @@
     }
   }
 
-  // bind buttons
-  qAll('.care-btn').forEach(b=> b.addEventListener('click', e=>{
-    const type = b.getAttribute('data-type'); addCare(type);
-  }));
-
-  q('#sendMsg').addEventListener('click', ()=>{
-    const text = msgInput.value.trim(); if(!text) return; if(text.length>30) return alert('30자 이내로 입력하세요');
-    addMessage(text); msgInput.value='';
+  // bind buttons (try both .care-btn and .care-btn-hero)
+  qAll('.care-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      const type = b.getAttribute('data-type');
+      addCare(type);
+    });
   });
+
+  qAll('.care-btn-hero').forEach(b => {
+    b.addEventListener('click', () => {
+      const type = b.getAttribute('data-type');
+      addCare(type);
+    });
+  });
+
+  if (msgInput) {
+    msgInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const sendBtn = q('#sendMsg');
+        if (sendBtn) sendBtn.click();
+      }
+    });
+  }
+
+  const sendBtn = q('#sendMsg');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      const text = msgInput ? msgInput.value.trim() : '';
+      if (!text) return;
+      if (text.length > 30) return alert('30자 이내로 입력하세요');
+      addMessage(text);
+      if (msgInput) msgInput.value = '';
+    });
+  }
 
   function hideLoader(){
     if(loaderEl) loaderEl.classList.add('hidden');

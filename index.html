@@ -1,91 +1,1214 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>식물 하나를 키우는 데는 온 학교가 필요하다</title>
-  <base href="./">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>식물 하나를 키우는 데는 온 학교가 필요하다</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(180deg, #f6fff2 0%, #eef9ef 45%, #d9f2d4 100%);
+            color: #1f3d1f;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(90, 117, 90, 0.15);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(31, 61, 31, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6aa95c, #3b7c3b);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #1f3d1f;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(106, 169, 92, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(106, 169, 92, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(59, 124, 59, 0.12) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 45%;
+            padding: 0 50px;
+            padding-left: 80px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(106, 169, 92, 0.15);
+            border: 1px solid rgba(106, 169, 92, 0.3);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #3b7c3b;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(31, 61, 31, 0.7);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(106, 169, 92, 0.3);
+        }
+
+        .btn-secondary {
+            padding: 16px 36px;
+            background: white;
+            border: 2px solid rgba(106, 169, 92, 0.3);
+            border-radius: 30px;
+            color: #3b7c3b;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .btn-secondary:hover {
+            border-color: #6aa95c;
+            background: rgba(106, 169, 92, 0.1);
+        }
+
+        .hero-3d {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 55%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .plant-card-hero {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(180deg, #fbfff9 0%, #f3fff3 100%);
+            border: 1px solid rgba(106, 169, 92, 0.18);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(47, 86, 47, 0.12);
+        }
+
+        .plant-header-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-label-hero {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #3b7c3b;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-title-hero {
+            font-size: 1.8rem;
+            color: #1f3d1f;
+            margin: 0;
+        }
+
+        .status-chip-hero {
+            display: inline-flex;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(106, 169, 92, 0.16);
+            color: #3b7c3b;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .plant-sprite-hero {
+            min-height: 280px;
+            border-radius: 24px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 107, 157, 0.25);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .plant-sprite-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 30%, rgba(255, 107, 157, 0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 70% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .plant-3d-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .plant-3d-object {
+            width: 140px;
+            height: 180px;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        .plant-leaf {
+            position: absolute;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            border-radius: 50% 50% 50% 0;
+            opacity: 0.9;
+        }
+
+        .leaf-1 {
+            width: 60px;
+            height: 60px;
+            left: -30px;
+            top: 40px;
+            transform: rotate(-45deg);
+            animation: leaf-float 4s ease-in-out infinite reverse;
+        }
+
+        .leaf-2 {
+            width: 70px;
+            height: 70px;
+            right: -35px;
+            top: 30px;
+            transform: rotate(135deg) scaleX(-1);
+            animation: leaf-float 5s ease-in-out infinite;
+        }
+
+        .leaf-3 {
+            width: 50px;
+            height: 50px;
+            left: 10px;
+            bottom: 20px;
+            background: linear-gradient(135deg, #8b5cf6, #c44569);
+            transform: rotate(-20deg);
+            animation: leaf-float 4.5s ease-in-out infinite reverse;
+        }
+
+        .plant-center {
+            position: absolute;
+            width: 40px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(90deg, transparent 30%, rgba(196, 69, 105, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .plant-pot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.25), rgba(139, 92, 246, 0.15));
+            border-radius: 0 0 20px 20px;
+            border: 2px solid rgba(255, 107, 157, 0.35);
+            box-shadow: 
+                inset 0 0 20px rgba(255, 107, 157, 0.2),
+                0 10px 30px rgba(255, 107, 157, 0.15);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateZ(-2deg); }
+            50% { transform: translateY(-30px) rotateZ(2deg); }
+        }
+
+        @keyframes leaf-float {
+            0%, 100% { transform: rotate(-45deg) translateX(0); }
+            50% { transform: rotate(-35deg) translateX(15px); }
+        }
+
+        .status-hero {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .grow-time-hero,
+        .last-care-hero,
+        .today-stats-hero {
+            font-size: 0.95rem;
+            color: #5c6d5c;
+            font-weight: 500;
+        }
+
+        .grow-time-hero {
+            font-weight: 700;
+            color: #3b7c3b;
+        }
+
+        .actions-hero {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .care-btn-hero {
+            background: white;
+            border: 1px solid rgba(106, 169, 92, 0.2);
+            color: #1f3d1f;
+            border-radius: 14px;
+            padding: 12px 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .care-btn-hero:hover {
+            transform: translateY(-2px);
+            border-color: rgba(106, 169, 92, 0.4);
+            box-shadow: 0 8px 20px rgba(62, 110, 62, 0.12);
+        }
+
+        .message-area-hero {
+            display: grid;
+            grid-template-columns: 1fr 0.6fr;
+            gap: 10px;
+        }
+
+        #msgInput {
+            border-radius: 12px;
+            border: 1px solid rgba(96, 146, 96, 0.22);
+            padding: 10px;
+            resize: none;
+            background: #fbfff9;
+            color: #1f3d1f;
+            font-size: 0.9rem;
+            min-height: 60px;
+        }
+
+        .send-msg-hero {
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .send-msg-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(62, 110, 62, 0.18);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 80px;
+            background: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(106, 169, 92, 0.1);
+            border-bottom: 1px solid rgba(106, 169, 92, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(31, 61, 31, 0.6);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 150px 80px;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(106, 169, 92, 0.15);
+            border: 1px solid rgba(106, 169, 92, 0.3);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #3b7c3b;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: rgba(31, 61, 31, 0.6);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(243, 255, 243, 0.5));
+            border: 1px solid rgba(106, 169, 92, 0.15);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6aa95c, #3b7c3b);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(106, 169, 92, 0.3);
+            box-shadow: 0 25px 50px rgba(47, 86, 47, 0.15);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(106, 169, 92, 0.2), rgba(59, 124, 59, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1f3d1f;
+        }
+
+        .feature-card p {
+            color: rgba(31, 61, 31, 0.65);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 150px 80px;
+            background: linear-gradient(180deg, transparent, rgba(106, 169, 92, 0.05), transparent);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 280px);
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-item:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery-item:nth-child(4) {
+            grid-column: span 2;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 150px 80px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(243, 255, 243, 0.5));
+            border: 1px solid rgba(106, 169, 92, 0.15);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            color: rgba(31, 61, 31, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 700;
+            color: #1f3d1f;
+            margin-bottom: 5px;
+        }
+
+        .testimonial-info span {
+            color: rgba(31, 61, 31, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 150px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 50% 50%, rgba(106, 169, 92, 0.15) 0%, transparent 60%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
+            color: #1f3d1f;
+        }
+
+        .cta h2 span {
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta p {
+            color: rgba(31, 61, 31, 0.7);
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 80px 40px;
+            border-top: 1px solid rgba(106, 169, 92, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: rgba(31, 61, 31, 0.5);
+            line-height: 1.8;
+            max-width: 300px;
+        }
+
+        .footer-column h4 {
+            font-weight: 700;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #1f3d1f;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 15px;
+        }
+
+        .footer-column a {
+            color: rgba(31, 61, 31, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: #6aa95c;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(106, 169, 92, 0.1);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-bottom p {
+            color: rgba(31, 61, 31, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(106, 169, 92, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(31, 61, 31, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, #6aa95c, #3b7c3b);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .effect-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(144, 218, 144, 0.8) 50%, transparent 100%);
+            opacity: 0;
+            transform: scale(0.5);
+            animation: spark 900ms ease-out forwards;
+        }
+
+        @keyframes spark {
+            0% { opacity: 1; transform: translateY(0) scale(0.6); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.4); }
+        }
+
+        @media (max-width: 1200px) {
+            .hero-content {
+                width: 50%;
+            }
+            .hero-3d {
+                width: 50%;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            nav {
+                padding: 15px 30px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero {
+                flex-direction: column;
+            }
+            .hero-content {
+                width: 100%;
+                padding: 120px 30px 50px;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .hero-3d {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 40px 30px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .features, .gallery, .testimonials, .cta {
+                padding: 100px 30px;
+            }
+            .section-header h2, .cta h2 {
+                font-size: 2.2rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            footer {
+                padding: 60px 30px 30px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="loader-screen" aria-hidden="true">
-    <div class="loader-card">
-      <h1>식물 하나를 키우는 데는 온 학교가 필요하다</h1>
-      <p class="loader-text">loading...</p>
-    </div>
-  </div>
-  <div class="emoji-background" aria-hidden="true"></div>
-  <main class="container hidden">
-    <header>
-      <h1>식물 하나를 키우는 데는 온 학교가 필요하다</h1>
-      <p class="subtitle">QR로 접속해 함께 돌보는 식물 다마고치</p>
-    </header>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🌱 식물 다마고치</div>
+        <ul class="nav-links">
+            <li><a href="#features">기능</a></li>
+            <li><a href="#gallery">갤러리</a></li>
+            <li><a href="#reviews">후기</a></li>
+            <li><a href="#contact">시작하기</a></li>
+        </ul>
+        <button class="nav-cta">QR 스캔</button>
+    </nav>
 
-    <section class="plant-area">
-      <div id="plantCard" class="plant-card">
-        <div id="plantSprite" class="plant-sprite" aria-hidden="true">
-          <!-- simple SVG plant -->
-          <svg viewBox="0 0 120 120" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="1.2"/>
-              </filter>
-            </defs>
-            <rect width="120" height="120" rx="16" fill="#f6fff6"/>
-            <g transform="translate(10,18)">
-              <ellipse cx="50" cy="80" rx="36" ry="12" fill="#c9a27a" />
-              <rect x="30" y="48" width="40" height="36" rx="6" fill="#e6caa7"/>
-              <g id="leaves" fill="#4caf50" filter="url(#soft)">
-                <ellipse cx="50" cy="36" rx="30" ry="14"/>
-                <ellipse cx="36" cy="26" rx="18" ry="8" transform="rotate(-20 36 26)"/>
-                <ellipse cx="64" cy="26" rx="18" ry="8" transform="rotate(20 64 26)"/>
-              </g>
-              <circle id="eyeL" cx="44" cy="32" r="2.5" fill="#173a18"/>
-              <circle id="eyeR" cx="56" cy="32" r="2.5" fill="#173a18"/>
-            </g>
-          </svg>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-badge">🌱 QR 기반 참여형 프로젝트</span>
+            <h1>식물 하나를 키우는 데는<br><span>온 학교가</span><br>필요하다</h1>
+            <p>여러 학생이 QR코드를 통해 함께 참여하는 웹 서비스. 물·햇빛·관찰·응원이 모여서 학교 식물을 키우는 따뜻한 디지털 다마고치입니다.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary">QR 스캔하기</button>
+                <button class="btn-secondary">자세히 보기</button>
+            </div>
         </div>
+        <div class="hero-3d">
+            <div class="plant-card-hero">
+                <div class="plant-header-hero">
+                    <div>
+                        <p class="card-label-hero">식물 친구</p>
+                        <h3 class="card-title-hero">초록이</h3>
+                    </div>
+                    <span class="status-chip-hero">함께 성장 중</span>
+                </div>
 
-        <div class="status">
-          <div id="growTime" class="grow-time">함께 자란 지 --일 --시간</div>
-          <div id="lastCare" class="last-care">마지막 돌봄 이후 --시간</div>
-          <div class="today-stats">오늘 받은 관심: <span id="todayCount">0</span></div>
-        </div>
+                <div id="plantSprite" class="plant-sprite-hero">
+                    <div class="plant-3d-container">
+                        <div class="plant-3d-object">
+                            <div class="plant-leaf leaf-1"></div>
+                            <div class="plant-leaf leaf-2"></div>
+                            <div class="plant-leaf leaf-3"></div>
+                            <div class="plant-center"></div>
+                            <div class="plant-pot"></div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="actions">
-          <button class="care-btn" data-type="soil">흙 확인했어요</button>
-          <button class="care-btn" data-type="sunlight">햇빛 확인했어요</button>
-          <button class="care-btn" data-type="leaf">잎을 관찰했어요</button>
-          <button class="care-btn" data-type="new">새 변화를 발견했어요</button>
-        </div>
+                <div class="status-hero">
+                    <div id="growTime" class="grow-time-hero">함께 자란 지 --일 --시간</div>
+                    <div id="lastCare" class="last-care-hero">마지막 돌봄 이후 --시간</div>
+                    <div class="today-stats-hero">오늘 받은 관심: <span id="todayCount">0</span></div>
+                </div>
 
-        <div class="message-area">
-          <textarea id="msgInput" maxlength="30" placeholder="응원 메시지를 30자 이내로 남겨주세요." rows="3"></textarea>
-          <button id="sendMsg">마음 남기기</button>
+                <div class="actions-hero">
+                    <button class="care-btn-hero" data-type="soil">흙 확인</button>
+                    <button class="care-btn-hero" data-type="sunlight">햇빛 확인</button>
+                    <button class="care-btn-hero" data-type="leaf">잎 관찰</button>
+                    <button class="care-btn-hero" data-type="new">변화 발견</button>
+                </div>
+
+                <div class="message-area-hero">
+                    <textarea id="msgInput" maxlength="30" placeholder="응원 30자"></textarea>
+                    <button id="sendMsg" class="send-msg-hero">남기기</button>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
-    <section class="memory">
-      <h2>메시지 카드</h2>
-      <div id="messages" class="messages"></div>
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">참여 학생</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3,240</div>
+                <div class="stat-label">누적 돌봄</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">456</div>
+                <div class="stat-label">응원 메시지</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">42일</div>
+                <div class="stat-label">함께한 시간</div>
+            </div>
+        </div>
     </section>
 
-    <section class="logs">
-      <h2>오늘의 돌봄 흔적</h2>
-      <ul id="logsList" class="logs-list"></ul>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="section-tag">주요 기능</span>
+            <h2>함께 키우는 특별한 경험</h2>
+            <p>학교 식물이 여러 학생의 관심으로 성장하는 모습을 느껴보세요.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>QR 접속</h3>
+                <p>식물 옆 QR코드를 스캔하면 언제든 접속 가능. 익명으로 참여할 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💧</div>
+                <h3>돌봄 기록</h3>
+                <p>흙·햇빛·잎 관찰·변화 발견 등 간단한 버튼으로 오늘의 돌봄을 기록합니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>응원 메시지</h3>
+                <p>30자 이내의 응원 메시지를 남길 수 있어요. 모든 메시지가 누적됩니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⏰</div>
+                <h3>함께한 시간</h3>
+                <p>식물을 키우기 시작한 날부터 몇 일, 몇 시간이 지났는지 실시간으로 표시됩니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>성장 기록</h3>
+                <p>오늘 받은 관심, 남겨진 메시지, 돌봄 흔적을 한눈에 볼 수 있습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌱</div>
+                <h3>감성 인터랙션</h3>
+                <p>버튼을 누를 때마다 따뜻한 시각 효과가 나타나 감성적 교감을 높입니다.</p>
+            </div>
+        </div>
     </section>
 
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="section-header">
+            <span class="section-tag">갤러리</span>
+            <h2>사용자들의 특별한 순간</h2>
+            <p>학생들이 남긴 응원 메시지와 돌봄의 흔적들을 감상해보세요.</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=500&h=500&fit=crop" alt="식물 1">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=500&fit=crop" alt="식물 2">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=500&h=500&fit=crop" alt="식물 3">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&h=500&fit=crop" alt="식물 4">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=500&h=500&fit=crop" alt="식물 5">
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop" alt="식물 6">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="reviews">
+        <div class="section-header">
+            <span class="section-tag">학생 후기</span>
+            <h2>함께한 학생들의 이야기</h2>
+            <p>이 프로젝트를 통해 느낀 특별한 경험들을 나눠주세요.</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">처음엔 그냥 버튼을 누르는 것인 줄 알았는데, 우리의 관심이 정말 모여서 식물이 자라는 모습을 보니까 신기해요.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="김민지">
+                    <div class="testimonial-info">
+                        <h4>김민지</h4>
+                        <span>학생 · 서울</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">응원 메시지를 남기고 싶었어요. 낯선 사람들의 메시지도 보면서 우리가 다 함께하고 있다는 느낌이 들었어요.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="이준호">
+                    <div class="testimonial-info">
+                        <h4>이준호</h4>
+                        <span>학생 · 부산</span>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">매일 쉬는 시간에 QR 스캔해서 확인했어요. 식물이 이렇게까지 자랄 수 있다니 우리들 덕분인 것 같아 뿌듯했어요.</p>
+                <div class="testimonial-author">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop" alt="박수진">
+                    <div class="testimonial-info">
+                        <h4>박수진</h4>
+                        <span>학생 · 대전</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="cta-bg"></div>
+        <div class="cta-content">
+            <h2>지금 <span>참여</span>하세요</h2>
+            <p>학교 식물 옆의 QR코드를 스캔하면 바로 시작할 수 있어요. 작은 관심이 모여 큰 성장을 만듭니다.</p>
+            <div class="cta-buttons">
+                <button class="btn-primary">QR 스캔하기</button>
+                <button class="btn-secondary">프로젝트 소개</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-      <small>익명 참여 · 개인정보 없음</small>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">🌱 식물 다마고치</div>
+                <p>함께 자라는 식물, 따뜻한 관심. 학교 식물을 함께 키우는 QR 기반 웹 서비스입니다.</p>
+            </div>
+            <div class="footer-column">
+                <h4>프로젝트</h4>
+                <ul>
+                    <li><a href="#features">기능</a></li>
+                    <li><a href="#gallery">갤러리</a></li>
+                    <li><a href="#reviews">후기</a></li>
+                    <li><a href="#contact">시작하기</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>정보</h4>
+                <ul>
+                    <li><a href="#">기획안</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">문의</a></li>
+                    <li><a href="#">개발팀</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>더보기</h4>
+                <ul>
+                    <li><a href="#">프로젝트 블로그</a></li>
+                    <li><a href="#">생기부 포인트</a></li>
+                    <li><a href="#">연락처</a></li>
+                    <li><a href="#">협력 제안</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 식물 하나를 키우는 데는 온 학교가 필요하다. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">📘</a>
+                <a href="#">🐦</a>
+                <a href="#">📸</a>
+                <a href="#">▶️</a>
+            </div>
+        </div>
     </footer>
-  </main>
 
-  <div id="effectLayer" class="effect-layer" aria-hidden="true"></div>
-
-  <script src="app.js" defer></script>
+    <div id="effectLayer" class="effect-layer" aria-hidden="true"></div>
+    <script src="app.js" defer></script>
 </body>
 </html>
