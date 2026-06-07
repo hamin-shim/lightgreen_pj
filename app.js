@@ -2,6 +2,7 @@
   const SUPABASE_URL = 'https://vvjzbjbdtxnbyvffjdnf.supabase.co';
   const SUPABASE_ANON_KEY = 'xxx';
   const CARE_EVENTS_TABLE = 'care_events';
+  const LOCAL_EVENTS_KEY = 'plantCareEvents_v1';
 
   const eventLabels = {
     soil: '흙 확인',
@@ -24,12 +25,25 @@
   const mainEl = q('main.container');
 
   const startDate = new Date('2026-06-07T00:00:00+09:00');
-  const isConfigured = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.length > 20;
-  const supabaseClient = isConfigured && window.supabase
+  const hasSupabaseConfig = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY !== 'xxx' && SUPABASE_ANON_KEY.length > 20;
+  const supabaseClient = hasSupabaseConfig && window.supabase
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 
   let lastCareTime = null;
+
+  function loadLocalEvents() {
+    try {
+      return JSON.parse(localStorage.getItem(LOCAL_EVENTS_KEY) || '[]');
+    } catch (error) {
+      console.warn('로컬 이벤트를 읽지 못했습니다.', error);
+      return [];
+    }
+  }
+
+  function saveLocalEvents(events) {
+    localStorage.setItem(LOCAL_EVENTS_KEY, JSON.stringify(events));
+  }
 
   function formatDuration(ms) {
     const seconds = Math.max(0, Math.floor(ms / 1000));
@@ -83,15 +97,41 @@
     if (mainEl) mainEl.classList.remove('hidden');
   }
 
-  function ensureSupabase() {
-    if (supabaseClient) return true;
-    console.warn('Supabase URL/Anon Key가 설정되지 않아 저장과 Realtime을 사용할 수 없습니다.');
-    return false;
+  function renderFromEvents(events) {
+    const sorted = [...events].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const latest = sorted[0];
+    const messages = sorted.filter(item => item.message).slice(0, 5);
+
+    if (totalCountEl) totalCountEl.textContent = events.length;
+    lastCareTime = latest ? new Date(latest.created_at) : null;
+    setRecentMessages(messages);
+    updateGrowTime();
+  }
+
+  function renderLocalEvents() {
+    renderFromEvents(loadLocalEvents());
+  }
+
+  function addLocalEvent(type, message = null) {
+    const event = {
+      id: window.crypto?.randomUUID ? window.crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
+      type,
+      label: eventLabels[type] ?? type,
+      message: message || null,
+      created_at: new Date().toISOString()
+    };
+    const events = [...loadLocalEvents(), event];
+    saveLocalEvents(events);
+    renderFromEvents(events);
   }
 
   async function refreshCareEvents() {
     updateGrowTime();
-    if (!ensureSupabase()) return;
+
+    if (!supabaseClient) {
+      renderLocalEvents();
+      return;
+    }
 
     const [{ count, error: countError }, { data: latestCare, error: careError }, { data: messages, error: messageError }] = await Promise.all([
       supabaseClient
@@ -112,6 +152,7 @@
 
     if (countError || careError || messageError) {
       console.error('care_events 조회 실패:', countError || careError || messageError);
+      renderLocalEvents();
       return;
     }
 
@@ -122,9 +163,14 @@
   }
 
   async function saveCareEvent(type, message = null) {
-    if (!ensureSupabase()) return;
-
     const cleanMessage = message ? message.trim() : null;
+
+    if (!supabaseClient) {
+      addLocalEvent(type, cleanMessage);
+      triggerEffect();
+      return;
+    }
+
     const payload = {
       type,
       label: eventLabels[type] ?? type,
@@ -137,7 +183,9 @@
 
     if (error) {
       console.error('care_events 저장 실패:', error);
-      alert('저장에 실패했습니다. Supabase 테이블 컬럼과 RLS 정책을 확인해주세요.');
+      addLocalEvent(type, cleanMessage);
+      alert('Supabase 저장에 실패해 이 브라우저에 임시 저장했습니다.');
+      triggerEffect();
       return;
     }
 
@@ -146,7 +194,7 @@
   }
 
   function subscribeRealtime() {
-    if (!ensureSupabase()) return;
+    if (!supabaseClient) return;
 
     supabaseClient
       .channel('care-events-realtime')
